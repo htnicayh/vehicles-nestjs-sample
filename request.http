@@ -1,0 +1,27 @@
+### create
+POST http://localhost:3001/auth/sign-up
+content-Type: application/json
+
+{
+    "email": "znoktob@gmail.com",
+    "password": "htnicayh"
+}
+
+### findOne
+GET http://localhost:3001/auth/2
+
+### findAll
+GET http://localhost:3001/auth?email=znoktob@gmail.com
+
+
+### Remove
+DELETE http://localhost:3001/auth/delete/1
+
+### Update
+PATCH http://localhost:3001/auth/update-me/2
+Content-Type: application/json
+
+{
+    "email": "hyacinth@gmail.com",
+    "password": "znoktob"
+}
