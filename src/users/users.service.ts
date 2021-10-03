@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from './entity/users.entity';
+// import { CONTROLLER_ERROR } from 'src/helper/error/status.error';
 
 @Injectable()
 export class UsersService {
