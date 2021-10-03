@@ -24,7 +24,7 @@ export class UsersService {
         return user
     }
 
-    find(email: string) {
+    findAll(email: string) {
         return this.Repo.find({ email })
     }
 

@@ -1,4 +1,3 @@
-import { HttpStatus } from "@nestjs/common";
 
 export class BaseError {
     protected errorCode: string;

@@ -7,36 +7,42 @@ import {
     Param, 
     Query, 
     Delete,
-    UseInterceptors,
-    ClassSerializerInterceptor
+    BadRequestException,
+    Inject,
+    forwardRef,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersService } from './users.service';
-import { SerializeInterceptor } from 'src/interceptors/serialize.interceptor';
+import { Serialize } from 'src/interceptors/serialize.interceptor';
 import { InstanceUserDto } from './dto/instance-user.dto';
+import { AuthService } from 'src/auth/auth.service';
 
 @Controller('auth')
+@Serialize(InstanceUserDto)
 export class UsersController {
-    constructor(private readonly usersService: UsersService) {}
+    constructor(
+        private readonly usersService: UsersService,
+        private readonly authService: AuthService
+    ) {}
 
     @Post('/sign-up')
     createUser(@Body() body: CreateUserDto) {
-        const { email, password } = body
-
-        this.usersService.create(email, password)
+        if (body?.email && body?.password) {
+            const { email, password } = body
+            return this.authService.signUp(email, password)
+        }
+        throw new BadRequestException('INPUT_INVALID')
     }
 
-    @UseInterceptors(new SerializeInterceptor(InstanceUserDto))
     @Get('/:id')
     findUser(@Param('id') id: string) {
         return this.usersService.findOne(parseInt(id))
     }
 
-    @UseInterceptors(ClassSerializerInterceptor)
     @Get()
     findAllUsers(@Query('email') email: string) {
-        return this.usersService.find(email)
+        return this.usersService.findAll(email)
     }
 
     @Delete('/delete/:id')
@@ -49,6 +55,6 @@ export class UsersController {
         if (body?.email || body?.password) {
             return this.usersService.update(parseInt(id), body)
         }
-        return
+        return;
     }
 }
