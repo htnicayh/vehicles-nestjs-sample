@@ -33,6 +33,8 @@ export class AuthService {
         }
         const [salt, hash] = user.password.split('.')
         const hashPw = ((await scrypt(password, salt, 32)) as Buffer).toString('hex')
+        
+        // Compare
         if (hashPw !== hash) {
             throw new BadRequestException('PASSWORD_IS_INCORECT')
         }

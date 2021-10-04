@@ -16,6 +16,12 @@ Content-Type: application/json
     "password": "htnicayh"
 }
 
+###
+GET http://localhost:3000/auth/authenticate
+
+###
+POST http://localhost:3000/auth/sign-out
+
 ### findOne
 GET http://localhost:3000/auth/2
 
