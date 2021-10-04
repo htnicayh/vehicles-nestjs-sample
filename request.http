@@ -1,24 +1,33 @@
 ### create
-POST http://localhost:3001/auth/sign-up
+POST http://localhost:3000/auth/sign-up
 content-Type: application/json
 
 {
-    "email": "znoktob2@gmail.com",
+    "email": "znoktob3@gmail.com",
+    "password": "htnicayh"
+}
+
+###
+POST http://localhost:3000/auth/sign-in
+Content-Type: application/json
+
+{
+    "email": "znoktob3@gmail.com",
     "password": "htnicayh"
 }
 
 ### findOne
-GET http://localhost:3001/auth/2
+GET http://localhost:3000/auth/2
 
 ### findAll
-GET http://localhost:3001/auth?email=znoktob@gmail.com
+GET http://localhost:3000/auth?email=znoktob@gmail.com
 
 
 ### Remove
-DELETE http://localhost:3001/auth/delete/1
+DELETE http://localhost:3000/auth/delete/1
 
 ### Update
-PATCH http://localhost:3001/auth/update-me/2
+PATCH http://localhost:3000/auth/update-me/2
 Content-Type: application/json
 
 {

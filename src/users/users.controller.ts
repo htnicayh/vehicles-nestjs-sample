@@ -7,9 +7,7 @@ import {
     Param, 
     Query, 
     Delete,
-    BadRequestException,
-    Inject,
-    forwardRef,
+    BadRequestException
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -31,6 +29,15 @@ export class UsersController {
         if (body?.email && body?.password) {
             const { email, password } = body
             return this.authService.signUp(email, password)
+        }
+        throw new BadRequestException('INPUT_INVALID')
+    }
+
+    @Post('/sign-in')
+    signIn(@Body() body: CreateUserDto) {
+        if (body?.email && body?.password) {
+            const { email, password } = body
+            return this.authService.signIn(email, password)
         }
         throw new BadRequestException('INPUT_INVALID')
     }
