@@ -7,14 +7,19 @@ import {
     Param, 
     Query, 
     Delete,
-    BadRequestException
+    BadRequestException,
+    Session,
+    UseGuards
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersService } from './users.service';
-import { Serialize } from 'src/interceptors/serialize.interceptor';
+import { Serialize } from 'src/middleware/interceptors/serialize.interceptor';
 import { InstanceUserDto } from './dto/instance-user.dto';
-import { AuthService } from 'src/auth/auth.service';
+import { AuthService } from 'src/middleware/authentication/authenticate.service';
+import { CurrentUser } from './decorator/current-user.decorator';
+import { AuthGuard } from 'src/guards/auth.guard';
+import { UserEntity } from './entity/users.entity';
 
 @Controller('auth')
 @Serialize(InstanceUserDto)
@@ -25,21 +30,36 @@ export class UsersController {
     ) {}
 
     @Post('/sign-up')
-    createUser(@Body() body: CreateUserDto) {
+    async createUser(@Body() body: CreateUserDto, @Session() session: any) {
         if (body?.email && body?.password) {
             const { email, password } = body
-            return this.authService.signUp(email, password)
+            const user = await this.authService.signUp(email, password)
+            session.userID = user.id
+            return user;
         }
         throw new BadRequestException('INPUT_INVALID')
     }
 
     @Post('/sign-in')
-    signIn(@Body() body: CreateUserDto) {
+    async signIn(@Body() body: CreateUserDto, @Session() session: any) {
         if (body?.email && body?.password) {
             const { email, password } = body
-            return this.authService.signIn(email, password)
+            const user = await this.authService.signIn(email, password)
+            session.userID = user.id
+            return user
         }
         throw new BadRequestException('INPUT_INVALID')
+    }
+
+    @Get('/authenticate')
+    @UseGuards(AuthGuard)
+    authenticate(@CurrentUser() user: UserEntity) {
+        return user;
+    }
+
+    @Post('/sign-out')
+    signOut(@Session() session: any) {
+        session.userID = null;
     }
 
     @Get('/:id')

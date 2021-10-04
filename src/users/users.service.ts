@@ -16,15 +16,18 @@ export class UsersService {
         return this.Repo.save(newUser)
     }
 
-    async findOne(id: number) {
-        const user = await this.Repo.findOne(id)
+    async findOne(id: number): Promise<UserEntity | undefined> {
+        const user = await this.Repo.findOne(id)    // if ID not exist, return first user
+        if (!id) {
+            return null;
+        }
         if (!user) {
             throw new NotFoundException(`NOT_FOUND_USER_ID_${id}`)
         }
         return user
     }
 
-    findAll(email: string) {
+    findAll(email: string): Promise<UserEntity[] | undefined> {
         return this.Repo.find({ email })
     }
 
