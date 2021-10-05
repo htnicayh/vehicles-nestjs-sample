@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from './entity/users.entity';
-// import { CONTROLLER_ERROR } from 'src/helper/error/status.error';
+import { CONTROLLER_ERROR } from 'src/helper/error/status.error';
 
 @Injectable()
 export class UsersService {
@@ -16,13 +16,13 @@ export class UsersService {
         return this.Repo.save(newUser)
     }
 
-    async findOne(id: number): Promise<UserEntity | undefined> {
+    async findOne(id: number): Promise<UserEntity | any> {
         const user = await this.Repo.findOne(id)    // if ID not exist, return first user
         if (!id) {
             return null;
         }
         if (!user) {
-            throw new NotFoundException(`NOT_FOUND_USER_ID_${id}`)
+            return CONTROLLER_ERROR.ID_NOTFOUND_ERROR
         }
         return user
     }

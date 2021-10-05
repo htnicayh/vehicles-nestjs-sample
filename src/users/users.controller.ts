@@ -20,6 +20,7 @@ import { AuthService } from 'src/middleware/authentication/authenticate.service'
 import { CurrentUser } from './decorator/current-user.decorator';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { UserEntity } from './entity/users.entity';
+import { CONTROLLER_ERROR } from '../helper/error/status.error';
 
 @Controller('auth')
 @Serialize(InstanceUserDto)
@@ -37,7 +38,7 @@ export class UsersController {
             session.userID = user.id
             return user;
         }
-        throw new BadRequestException('INPUT_INVALID')
+        return CONTROLLER_ERROR.INVALID_EMAIL_OR_PASSWORD_ERROR
     }
 
     @Post('/sign-in')
@@ -48,7 +49,7 @@ export class UsersController {
             session.userID = user.id
             return user
         }
-        throw new BadRequestException('INPUT_INVALID')
+        return CONTROLLER_ERROR.INVALID_EMAIL_OR_PASSWORD_ERROR
     }
 
     @Get('/authenticate')

@@ -1,7 +1,7 @@
 import { HttpStatus } from "@nestjs/common";
 import { BaseError } from "./base.error";
 
-class ControllerError extends BaseError {
+export class ControllerError extends BaseError {
     constructor(message: string, errorCode: string, statusCode: number) {
         super()
         this.message = message;
