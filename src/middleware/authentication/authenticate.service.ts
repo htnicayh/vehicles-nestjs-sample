@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { 
+    BadRequestException, 
+    Injectable, 
+    NotFoundException, 
+    UnauthorizedException 
+} from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import { randomBytes, scrypt as _scrypt } from 'crypto';
 import { promisify } from 'util';
