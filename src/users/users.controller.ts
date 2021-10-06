@@ -7,7 +7,6 @@ import {
     Param, 
     Query, 
     Delete,
-    BadRequestException,
     Session,
     UseGuards
 } from '@nestjs/common';
@@ -32,7 +31,7 @@ export class UsersController {
 
     @Post('/sign-up')
     async createUser(@Body() body: CreateUserDto, @Session() session: any) {
-        if (body?.email && body?.password) {
+        if (body.email && body.password) {
             const { email, password } = body
             const user = await this.authService.signUp(email, password)
             session.userID = user.id
@@ -43,7 +42,7 @@ export class UsersController {
 
     @Post('/sign-in')
     async signIn(@Body() body: CreateUserDto, @Session() session: any) {
-        if (body?.email && body?.password) {
+        if (body.email && body.password) {
             const { email, password } = body
             const user = await this.authService.signIn(email, password)
             session.userID = user.id
