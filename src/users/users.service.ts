@@ -27,7 +27,7 @@ export class UsersService {
         return user
     }
 
-    findAll(email: string): Promise<UserEntity[] | undefined> {
+    findAll(email: string): Promise<UserEntity[]> {
         return this.Repo.find({ email })
     }
 

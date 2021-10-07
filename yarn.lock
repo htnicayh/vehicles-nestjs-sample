@@ -3759,7 +3759,7 @@
     "merge-stream" "^2.0.0"
     "supports-color" "^8.0.0"
 
-"jest@^27.0.0", "jest@^27.0.6":
+"jest@^27.0.0", "jest@^27.2.4":
   "integrity" "sha512-h4uqb1EQLfPulWyUFFWv9e9Nn8sCqsJ/j3wk/KCY0p4s4s0ICCfP3iMf6hRf5hEhsDyvyrCgKiZXma63gMz16A=="
   "resolved" "https://registry.npmjs.org/jest/-/jest-27.2.4.tgz"
   "version" "27.2.4"

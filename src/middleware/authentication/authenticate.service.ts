@@ -8,6 +8,7 @@ import { UsersService } from '../../users/users.service';
 import { randomBytes, scrypt as _scrypt } from 'crypto';
 import { promisify } from 'util';
 import { InstanceUserDto } from 'src/users/dto/instance-user.dto';
+import { CreateUserDto } from 'src/users/dto/create-user.dto';
 
 const scrypt = promisify(_scrypt)
 
@@ -15,7 +16,7 @@ const scrypt = promisify(_scrypt)
 export class AuthService {
     constructor(private readonly usersService: UsersService) {}
 
-    async signUp(email: string, password: string): Promise<InstanceUserDto> {
+    async signUp(email: string, password: string) {
         const users = await this.usersService.findAll(email)
         if (users.length) {
             throw new UnauthorizedException('EMAIL_ALREADY_EXIST')
@@ -31,7 +32,7 @@ export class AuthService {
 
     }
 
-    async signIn(email: string, password: string): Promise<InstanceUserDto> {
+    async signIn(email: string, password: string) {
         const [user] = await this.usersService.findAll(email)
         if (!user) {
             throw new NotFoundException('EMAIL_IS_INCORECT')
