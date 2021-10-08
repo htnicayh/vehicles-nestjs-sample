@@ -7,8 +7,8 @@ import {
 import { UsersService } from '../../users/users.service';
 import { randomBytes, scrypt as _scrypt } from 'crypto';
 import { promisify } from 'util';
-import { InstanceUserDto } from 'src/users/dto/instance-user.dto';
-import { CreateUserDto } from 'src/users/dto/create-user.dto';
+// import { InstanceUserDto } from 'src/users/dto/instance-user.dto';
+// import { CreateUserDto } from 'src/users/dto/create-user.dto';
 
 const scrypt = promisify(_scrypt)
 

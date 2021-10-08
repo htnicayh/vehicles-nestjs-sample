@@ -13,11 +13,11 @@ import {
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersService } from './users.service';
-import { Serialize } from 'src/middleware/interceptors/serialize.interceptor';
+import { Serialize } from '../middleware/interceptors/serialize.interceptor';
 import { InstanceUserDto } from './dto/instance-user.dto';
-import { AuthService } from 'src/middleware/authentication/authenticate.service';
+import { AuthService } from '../middleware/authentication/authenticate.service';
 import { CurrentUser } from './decorator/current-user.decorator';
-import { AuthGuard } from 'src/guards/auth.guard';
+import { AuthGuard } from '../guards/auth.guard';
 import { UserEntity } from './entity/users.entity';
 import { CONTROLLER_ERROR } from '../helper/error/status.error';
 

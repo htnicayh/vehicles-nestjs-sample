@@ -8,10 +8,19 @@ describe('AuthService', () => {
     let fakeUserService: Partial<UsersService>
 
     beforeEach(async () => {
+        const users: UserEntity[] = []
         fakeUserService = {
-            findAll: (): Promise<UserEntity[]> => Promise.resolve([]),
-            create: (email: string, password: string): Promise<UserEntity> => 
-                Promise.resolve({ id: 1, email, password })
+            findAll: (email: string): Promise<UserEntity[]> => {
+                const userResults = users.filter((user) => {
+                    return user.email === email
+                })
+                return Promise.resolve(userResults)
+            },
+            create: (email: string, password: string): Promise<UserEntity> => {
+                const user = {id: Math.floor(Math.random() * 1000), email, password }
+                users.push(user)
+                return Promise.resolve(user)
+            }
         }
 
         const module = await Test.createTestingModule({
@@ -40,33 +49,19 @@ describe('AuthService', () => {
         expect(hash).toBeDefined()
     })
 
-    it('throw an error when sign up if user have already exist', async (done) => {
-        fakeUserService.findAll = () => {
-            return Promise.resolve([{id: 1, email: 'a', password: '1'} as UserEntity]);
-        }
+    it('throw an error if user sign up with email that is exist', async () => {
+        await service.signUp('asdf@asdf.com', 'asdf')
         try {
-            await service.signUp('asdf@asdf.com', 'asdf');
-        } catch {
-            done();
+            await service.signIn('asdf@asdf.com', 'asdf')
+        } catch (error) {
+            return Promise.reject(error)
         }
     })
 
-    it('Don`t throw an error when sign in if user have already exist', async (done) => {
-        try {
-            await service.signIn('asdfáds@asdfáds.com', 'asdf');
-        } catch {
-            done();
-        }
-    })
+    it('SignIn with information after SignUp with email & password', async () => {
+        await service.signUp('asdfg@asdfg.com', 'mypassword')
 
-    it('Null', async () => {
-        fakeUserService.findAll = () => {
-            return Promise.resolve([{
-                email: 'asdf@asdf.com',
-                password: '6f6ccebb49a5f751.c5c40eb37df92160c33a765a94ef89bd62c7a436377ce36eaa3a38031b746f27'
-            } as UserEntity])
-        }
-        const user = await service.signIn('asdf@asdf.com', 'mypassword')
+        const user = await service.signIn('asdfg@asdfg.com', 'mypassword')
         expect(user).toBeDefined()
     })
 })
