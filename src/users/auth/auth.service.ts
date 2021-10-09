@@ -1,12 +1,15 @@
 import { 
     BadRequestException, 
+    forwardRef, 
+    Inject, 
     Injectable, 
     NotFoundException, 
     UnauthorizedException 
 } from '@nestjs/common';
-import { UsersService } from '../../users/users.service';
+import { UsersService } from '../users.service';
 import { randomBytes, scrypt as _scrypt } from 'crypto';
 import { promisify } from 'util';
+import { UserEntity } from '../entity/users.entity';
 // import { InstanceUserDto } from 'src/users/dto/instance-user.dto';
 // import { CreateUserDto } from 'src/users/dto/create-user.dto';
 
@@ -14,9 +17,9 @@ const scrypt = promisify(_scrypt)
 
 @Injectable()
 export class AuthService {
-    constructor(private readonly usersService: UsersService) {}
+    constructor(@Inject(forwardRef(() => UsersService))private readonly usersService: UsersService) {}
 
-    async signUp(email: string, password: string) {
+    async signUp(email: string, password: string): Promise<UserEntity> {
         const users = await this.usersService.findAll(email)
         if (users.length) {
             throw new UnauthorizedException('EMAIL_ALREADY_EXIST')
@@ -32,7 +35,7 @@ export class AuthService {
 
     }
 
-    async signIn(email: string, password: string) {
+    async signIn(email: string, password: string): Promise<UserEntity> {
         const [user] = await this.usersService.findAll(email)
         if (!user) {
             throw new NotFoundException('EMAIL_IS_INCORECT')

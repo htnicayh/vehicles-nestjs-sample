@@ -8,47 +8,50 @@ import {
     Query, 
     Delete,
     Session,
-    UseGuards
+    UseGuards,
+    Inject,
+    forwardRef,
+    BadRequestException
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersService } from './users.service';
 import { Serialize } from '../middleware/interceptors/serialize.interceptor';
 import { InstanceUserDto } from './dto/instance-user.dto';
-import { AuthService } from '../middleware/authentication/authenticate.service';
+import { AuthService } from './auth/auth.service';
 import { CurrentUser } from './decorator/current-user.decorator';
 import { AuthGuard } from '../guards/auth.guard';
 import { UserEntity } from './entity/users.entity';
-import { CONTROLLER_ERROR } from '../helper/error/status.error';
+import { ControllerError, CONTROLLER_ERROR } from '../helper/error/status.error';
 
 @Controller('auth')
 @Serialize(InstanceUserDto)
 export class UsersController {
     constructor(
-        private readonly usersService: UsersService,
-        private readonly authService: AuthService
+        @Inject(forwardRef(() => UsersService)) private readonly usersService: UsersService,
+        @Inject(forwardRef(() => AuthService))private readonly authService: AuthService
     ) {}
 
     @Post('/sign-up')
-    async createUser(@Body() body: CreateUserDto, @Session() session: any) {
+    async createUser(@Body() body: CreateUserDto, @Session() session: any): Promise<UserEntity> {
         if (body.email && body.password) {
             const { email, password } = body
             const user = await this.authService.signUp(email, password)
             session.userID = user.id
             return user;
         }
-        return CONTROLLER_ERROR.INVALID_EMAIL_OR_PASSWORD_ERROR
+        throw new BadRequestException('INVALID_EMAIL')
     }
 
     @Post('/sign-in')
-    async signIn(@Body() body: CreateUserDto, @Session() session: any) {
+    async signIn(@Body() body: CreateUserDto, @Session() session: any): Promise<UserEntity> {
         if (body.email && body.password) {
             const { email, password } = body
             const user = await this.authService.signIn(email, password)
             session.userID = user.id
             return user
         }
-        return CONTROLLER_ERROR.INVALID_EMAIL_OR_PASSWORD_ERROR
+        throw new BadRequestException('INVALID_EMAIL')
     }
 
     @Get('/authenticate')
