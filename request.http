@@ -40,3 +40,6 @@ Content-Type: application/json
     "email": "hyacinth@gmail.com",
     "password": "znoktob"
 }
+
+###
+GET http://localhost:3000

@@ -1,8 +1,9 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { APP_PIPE } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthService } from 'src/users/auth/auth.service';
-import { UsersService } from 'src/users/users.service';
+import { PipeMiddleware } from '../middleware/pipe.middleware';
+import SessionMiddleware from '../middleware/session.middleware';
 import { ormConfig } from '../helper/config/configuration';
 import { ReportsModule } from '../reports/reports.module';
 import { UsersModule } from '../users/users.module';
@@ -18,6 +19,16 @@ import { AppService } from './app.service';
     UsersModule, 
     ReportsModule],
   controllers: [AppController],
-  providers: [AppService]
+  providers: [
+    AppService,
+    {
+      provide: APP_PIPE,
+      useValue: PipeMiddleware
+    }
+  ]
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(SessionMiddleware).forRoutes('*')
+  }
+}
