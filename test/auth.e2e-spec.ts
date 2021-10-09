@@ -27,4 +27,20 @@ describe('AuthController (e2e)', () => {
           expect(email).toEqual('asdf@asdf.com')
       })
   });
+
+  it('/ (POST)', async () => {
+    const email = 'asdf@asdf.com'
+
+    const response = await request(app.getHttpServer())
+      .post('/auth/sign-up')
+      .send({ email, password: 'asdf' })
+      .expect(201)
+
+    const cookie = response.get('Set-Cookie')
+    const { body } = await request(app.getHttpServer())
+      .get('/auth/authenticate')
+      .set('Cookie', cookie)
+      .expect(200)
+    expect(body?.email).toEqual(email)
+  });
 });
