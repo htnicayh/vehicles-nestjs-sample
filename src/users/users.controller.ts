@@ -29,7 +29,7 @@ import { ControllerError, CONTROLLER_ERROR } from '../helper/error/status.error'
 export class UsersController {
     constructor(
         @Inject(forwardRef(() => UsersService)) private readonly usersService: UsersService,
-        @Inject(forwardRef(() => AuthService))private readonly authService: AuthService
+        @Inject(forwardRef(() => AuthService)) private readonly authService: AuthService
     ) {}
 
     @Post('/sign-up')

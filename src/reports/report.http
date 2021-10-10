@@ -1,0 +1,12 @@
+POST http://localhost:3000/reports/create-report
+Content-Type: application/json
+
+{
+    "make": "Toyota",
+    "model": "Porsche",
+    "year": 2021,
+    "mileage": 15000,
+    "longtitude": 0,
+    "latitude": 0,
+    "price": 45656
+}
