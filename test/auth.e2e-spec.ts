@@ -19,7 +19,7 @@ describe('AuthController (e2e)', () => {
   it('/ (GET)', () => {
     return request(app.getHttpServer())
       .post('/auth/sign-up')
-      .send({ email: 'asdf@asdf.com', password: 'asdf' })
+      .send({ email: 'asdf@asdf.com', password: 'asdfgfhfghj' })
       .expect(201)
       .then((repsonse) => {
           const { id, email } = repsonse.body

@@ -1,9 +1,8 @@
-import { Module } from '@nestjs/common';
-import { APP_INTERCEPTOR } from '@nestjs/core';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { CurrentMiddleware } from '../middleware/current.middleware';
 import { AuthService } from './auth/auth.service';
 import { UserEntity } from './entity/users.entity';
-import { CurrentUserInterceptor } from './interceptor/current-user.interceptor';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 
@@ -12,12 +11,12 @@ import { UsersService } from './users.service';
   controllers: [UsersController],
   providers: [
     UsersService,
-    AuthService,
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: CurrentUserInterceptor
-    }
+    AuthService
   ],
   exports: [UsersService, AuthService]
 })
-export class UsersModule {}
+export class UsersModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(CurrentMiddleware).forRoutes('*')
+  }
+}

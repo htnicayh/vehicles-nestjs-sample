@@ -2,11 +2,22 @@ POST http://localhost:3000/reports/create-report
 Content-Type: application/json
 
 {
-    "make": "Toyota",
-    "model": "Porsche",
-    "year": 2021,
-    "mileage": 15000,
-    "longtitude": 0,
-    "latitude": 0,
-    "price": 45656
+    "make": "Ford",
+    "model": "Mustang",
+    "year": 1982,
+    "mileage": 50000,
+    "longtitude": 45,
+    "latitude": 45,
+    "price": 20000
 }
+
+###
+PATCH http://localhost:3000/reports/17
+Content-Type: application/json
+
+{
+    "approved": true
+}
+
+###
+GET http://localhost:3000/reports?make=Ford&model=Mustang&year=1981&mileage=20000&longtitude=45&latitude=45

@@ -1,10 +1,7 @@
-import { ReportEntity } from "src/reports/entity/reports.entity";
-import { 
-    Entity, 
-    Column, 
-    PrimaryGeneratedColumn,
-    OneToMany
+import {
+    Column, Entity, OneToMany, PrimaryGeneratedColumn
 } from "typeorm";
+import { ReportEntity } from "../../reports/entity/reports.entity";
 
 @Entity()
 export class UserEntity {
@@ -16,6 +13,9 @@ export class UserEntity {
 
     @Column()
     password: string;
+
+    @Column({ default: true })
+    admin: boolean;
 
     @OneToMany(() => ReportEntity, (report) => report.user)
     reports: ReportEntity[]
